@@ -15,35 +15,79 @@ body {
 .tile {
 	position: absolute;
 	width: 20%;		/* desired width */
-  border: 2px solid #ccc;
+  //border: 2px solid #ccc;
+
+}
+
+.wide {
+  width: 40%;
 }
 .tile:before{
 	content: "";
 	display: block;
 	padding-top: 100%; 	/* initial ratio of 1:1*/
-  background: red;
 }
 
 .filler:before{
-  background: orange;
+
 }
 
 .tall:before{
 	padding-top: 200%;
-  background: green;
+
 }
 
 .wide:before{
-	padding-top: 200%;
-  background: green;
-}
-.content {
+	padding-top: 50%;
 
+}
+
+.content {
+width: 100%;
   position:  absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
+  //margin: .125em;
+  background: red;
+  
+}
+.hidden {
+	display: none;
+}
+
+.content p {
+    font-family: 'Slabo 27px', serif;
+    font-size: 2em;
+    color: white;
+    line-height: 0%;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+
+
+
+.filler .content  {
+  background: orange;
+}
+
+.tall .content  {
+
+  background: green;
+}
+
+ .wide .content {
+
+  background: purple;
+}
+.content:hover {
+	background: #ccc;
+  cursor: pointer;
 }
 
 .browserupgrade {

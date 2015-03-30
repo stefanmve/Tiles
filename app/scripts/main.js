@@ -1,6 +1,8 @@
 /* jshint devel:true */
 'use strict';
+
 var container = document.getElementById('container');
+var winWidth = window.innerWidth;
 var tiles = document.getElementsByClassName('tile');
 var tileCopy = [];
 var tilesLength = tiles.length;
@@ -11,83 +13,171 @@ var tileSizes = {
 	tall: [1, 2],
 	wide: [2, 1]
 };
-var columns = 5;
-var row = 0;
+var col = 5;
+var unit = winWidth / col;
 var totalArea = 0;
 var docfrag = document.createDocumentFragment();
 var remainder, filler = 0;
-var grid = [];
+
+Array.prototype.shuffle = function() {
+	var input = this;
+
+	for (var i = input.length - 1; i >= 0; i--) {
+
+		var randomIndex = Math.floor(Math.random() * (i + 1));
+		var itemAtIndex = input[randomIndex];
+
+		input[randomIndex] = input[i];
+		input[i] = itemAtIndex;
+	}
+	return input;
+};
+
 //add inner content for height hack
 for (var i = 0; i < tilesLength; i++) {
-	// var regexp = tiles[i].match(/class=\"tile (.*?)\" <\/div>"/g);
+	// var regexp = tiles[i].match(/class=\'tile (.*?)\' <\/div>'/g);
 	var size, area;
-	typeof tiles[i].classList[1] === "string" ? size = tiles[i].classList[1] :
-		size = "basic";
+	if (typeof tiles[i].classList[1] === 'string') {
+		size = tiles[i].classList[1];
+	} else {
+		size = 'basic';
+	}
+
 	//console.log(size);
 	area = tileSizes[size][0] * tileSizes[size][1];
 	//console.log(area);
 
 	totalArea += area;
-	tiles[i].innerHTML = '<div class=\'content\'></div>';
+	tiles[i].innerHTML = '<div class=\'content\'>' + tiles[i].innerHTML + '</div>';
 	tileCopy.push([tiles[i].outerHTML, size]);
 }
-console.log(totalArea);
+console.log('totalArea: ' + totalArea);
+//console.log('tileCopy: ' + tileCopy);
 
 
-remainder = totalArea % columns;
-console.log("r: " + remainder)
+remainder = totalArea % col;
+console.log('r: ' + remainder);
 
 if (remainder !== 0) {
-	filler = columns * 2 - remainder;
+	filler = col * 2 - remainder;
 }
 totalTiles += filler;
-// for (var i = 0; i < tilesLength; i++) {
-// 	tileCopy.push(tiles[i].outerHTML);
-// }
-console.log(tileCopy);
-
+console.log('f: ' + filler);
+console.log('totalTiles: ' + totalTiles);
 
 for (var i = tilesLength; i < totalTiles; i++) {
-	var size = tileSizes['filler'][0] * tileSizes['filler'][1];
-	tileCopy.push(['<div class="tile filler"><div class="content"></div></div>',
-		size
-	]);
+	var size = 'filler';
+	var area = tileSizes[size][0] * tileSizes[size][1];
+	tileCopy.push(['<div class=\'tile filler\'><div class=\'content\'><p>Filler<p></div></div>',size]);
+	totalArea += area;
 }
+console.log('totalArea ' + totalArea);
+var rows = totalArea / col;
 
-var rows = totalTiles / columns;
-for (var i = 1; i <= rows; i++) {
-	var gridRow = [];
-	for (var j = 1; j <= columns; j++) {
-		gridRow.push(0);
-	}
-	grid.push(gridRow);
-}
 while (container.hasChildNodes()) {
 	container.removeChild(container.lastChild);
 }
 
-function Shuffle(o) {
-	for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i],
-		o[i] = o[j], o[j] = x);
-	return o;
-};
-Shuffle(tileCopy);
-console.log(tileCopy);
-for (var i = 0; i < tilesLength; i++) {
+// Shuffle(tileCopy);
+//console.log(tileCopy);
+tileCopy.shuffle();
+var griddy = new Grid(col, rows);
+griddy.init();
+var last = 0;
+var nextXCoord = 0;
+var nextYCoord = 0;
+for (var i = 0; i < tileCopy.length; i++) {
+	console.log(i + 1 + " of " + tileCopy.length);
 	var div = document.createElement('div');
 	var size = tileCopy[i][1];
+	var unitWidth = winWidth / col;
 	div.innerHTML = tileCopy[i][0];
 	var insert = div.firstChild;
-	checkGrid(size);
-	insert.style.top = Math.random() * document.body.clientHeight + 'px';
-	insert.style.left = Math.random() * document.body.clientWidth + 'px';
+	var coords = griddy.find(insert, size);
+	console.log(coords);
 	docfrag.appendChild(insert);
+	//position(insert, coords[x], coords[y]);
+	insert.setAttribute('style', 'left:' + coords['x'] * unitWidth + 'px; top:' + coords['y'] * unitWidth +
+	'px;');
+	
+	
+	// if (nextXCoord >= winWidth) {
+	// 	nextYCoord = winWidth / col;
+	// 	nextXCoord = 0;
+	// }
 }
-
-function checkGrid(size) {
-	console.log('checking');
-}
-
-
 
 container.appendChild(docfrag);
+container.removeAttribute("class");
+
+function position(obj, coordx, coordy) {
+	obj.setAttribute('style', 'left:' + coordx * unitWidth + 'px; top:' + coordy * unitWidth +
+	'px;');
+}
+
+
+function Grid(col, rows) {
+		this.col = col;
+		this.rows = rows;
+		//this.cells = new Array(col * rows);
+		this.grid = [];
+		this.init = function() {
+			//var gridRow = new Array(rows * col);
+			for (var i = 1; i <= rows * col; i++) {
+				//var gridRow = [];
+				//for (var j = 1; j <= col; j++) {
+					this.grid.push(0);
+				//}
+				//this.grid.push(0);
+			
+			}
+		};
+		
+		this.find = function(obj, size) {
+			var dimensions = tileSizes[size];
+			
+			if (dimensions[0] === 1 && dimensions[1] === 1) {
+				for (var i=0; i < col*rows; i++) {
+					if (this.grid[i] === 0) {
+						this.grid[i] = obj;
+						return this.place(i);
+					}	
+				}
+			}
+			if (dimensions[0] === 2 && dimensions[1] === 1) {
+				for (var i=0; i < col*rows; i++) {
+					if (this.grid[i] === 0 && this.grid[i+1] === 0 && (i + 1)%col !== 0) {
+						this.grid[i] = obj;
+						this.grid[i+1] = obj;
+						return this.place(i);
+					}	
+				}
+			}
+			if (dimensions[0] === 1 && dimensions[1] === 2) {
+				for (var i=0; i < col*rows; i++) {
+					if (this.grid[i] === 0 && this.grid[i+col] === 0) {
+						this.grid[i] = obj;
+						this.grid[i+col] = obj;
+						return this.place(i);
+					}	
+				}
+			}
+			
+
+		};
+
+		this.place = function(input) {
+			if (input === 0) {
+				var y = 0;
+				var x = 0;
+			} else if (input%col === 0) {
+				var y = Math.ceil(input/col);
+				var x = input%col;
+			} else {
+				var y = Math.ceil(input/col)-1;
+				var x = input%col;
+			}
+			
+			return {x: x, y:y, index:input};
+		};
+	}
