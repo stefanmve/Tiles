@@ -1,65 +1,71 @@
-//bower:scss
+// bower:scss
 // endbower
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-	margin: 0;
-	padding: 0;
-}
+  margin: 0;
+  padding: 0;
+color: red;
 
+}
 body.measure {
-	display: none;
+  display: none;
 }
 
 .hidden {
-	display: none;
+  display: none;
 }
-
 .tile {
 	position: absolute;
-	width: 20%;
-		/* desired width */
-	//border: 2px solid #ccc;
+	width: 20%;		/* desired width */
+  //border: 2px solid #ccc;
+
+
+
 }
 
 .wide {
-	width: 40%;
+  width: 40%;
 }
-
-.tile:before {
+.tile:before{
 	content: "";
 	display: block;
-	padding-top: 100%;
- 	/* initial ratio of 1:1*/;
+	padding-top: 100%; 	/* initial ratio of 1:1*/
 }
 
-.filler:before {
+.filler:before{
+
 }
 
-.tall:before {
+.tall:before{
 	padding-top: 200%;
+
 }
 
-.wide:before {
+.wide:before{
 	padding-top: 50%;
+
 }
 
 .content {
-	width: 100%;
-	position: absolute;
+
+width: 100%;
+  position:  absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
-	//margin: .125em;
-	overflow: hidden;
+  //margin: .125em;
+
+  overflow:hidden;
 	//background-image: url('http://beerhold.it/200/200');
 	background-size: cover;
 	transition: border .25s;
 	border: 1em #fff solid;
+
 }
 
 .content:hover {
@@ -74,20 +80,23 @@ body.measure {
 	content: "";
 	display: block;
 	width: 100%;
-	height: 100%;
- 	/* initial ratio of 1:1*/
+	height: 100%; 	/* initial ratio of 1:1*/
 	background-color: rgba(14,171,203,1);
 	opacity: .5;
 	transition: opacity .5s;
 }
 
+
 .content:hover:after {
-	opacity: 1;
+
+	opacity: 0;
 }
 
 .filler .content:hover:after {
+
 	opacity: .5;
 }
+
 
 .hidden {
 	display: none;
@@ -97,18 +106,22 @@ body.measure {
 	font-family: 'Slabo 27px', serif;
 	font-size: 1em;
 	color: white;
-
+	line-height: 100%;
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
 	background: #006B8F;
 	padding: 2em;
 	border-radius: 2em;
 	z-index: 100;
 	text-transform: uppercase;
 	//text-shadow: 1px 1px 1px black;
-	transition: padding .5s, width .5s, border-radius .5s;
+	transition: transform .5s, padding .5s, width .5s, border-radius .5s;
 	text-align: center;
+
+
 }
 
 .content:hover .menu {
@@ -117,56 +130,161 @@ body.measure {
 	color: #006B8F;
 	border-radius: 0;
 	font-weight: bolder;
+	transform: translate(-50%, 80%);
 	//padding: 3em;
 }
 
-.filler .content {
-	//background: orange;
-	//background-image: url('http://placeskull.com/200/200');
+.tall .content:hover .menu {
+
+	transform: translate(-50%, 200%);
+	//padding: 3em;
 }
 
-.filler .content:after {
-	//background-color: rgba(242,190,34,1);
+
+.content .info {
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 200;
+	margin-right: -50%;
+	transform: translate(-50%, -500%) scale(0, 0);
+	width: 100%;
+	height: 100%;
+	// animation-delay: 2s;
+	transition: scale .5s;
+	opacity: 0;
+	padding: 2em;
+	overflow:hidden;
+	font-family: 'Slabo 27px', serif;
 }
 
-.tall .content {
-	// background: green;
-	//background-image: url('http://place-hoff.com/100/200');
+// .content:hover .info {
+//     //z-index: 200;
+//     transform: translate(-50%, -50%) scale(1, 1);
+//     // background: #FFFFFF;
+//     color:  #FFFFFF;
+//     background-color: rgba(120,90,12,1);
+//     opacity: 1;
+// 
+//     //padding: 3em;
+// }
+
+.filler .content  {
+  //background: orange;
+  //background-image: url('http://placeskull.com/200/200');
+}
+
+.filler .content:after  {
+  //background-color: rgba(242,190,34,1);
+}
+
+.tall .content  {
+
+ // background: green;
+ //background-image: url('http://place-hoff.com/100/200');
 }
 
 .tall .content:after {
 	background-color: rgba(36,53,63,1);
 }
 
-.wide .content {
-	//background-image: url('http://placebear.com/200/100');
+ .wide .content {
+
+  // background-image: url('http://placebear.com/200/100');
+
 }
 
+ .cms .content {
+ 
+   background-image: url('../images/citi.png');
+ 
+ }
+ 
+ .ibm .content {
+ 
+   background-image: url('../images/ibm.png');
+ 
+ }
+ 
+ .suntrust .content {
+ 
+   background-image: url('../images/suntrust.png');
+ 
+ }
+ 
+ .cloud .content {
+ 
+   background-image: url('../images/thecloud.png');
+ 
+ }
+ 
+ .tg1 .content {
+ 
+   background-image: url('../images/thinkgigbusiness.png');
+ 
+ }
+ 
+ .tg2 .content {
+ 
+   background-image: url('../images/thinkgigcities.png');
+ 
+ }
+ 
+ .tg3 .content {
+ 
+   background-image: url('../images/thinkgigdatacenter.png');
+ 
+ }
+ 
+ .tg4 .content {
+ 
+   background-image: url('../images/thinkgigdevices.png');
+ 
+ }
+ 
+ .wiz .content {
+ 
+   background-image: url('../images/wizard.png');
+ 
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 .wide .content:after {
 	background-color: rgba(120,90,12,1);
+	
 }
-
 .content:hover {
 	//background: #ccc;
-	cursor: pointer;
+  cursor: pointer;
 }
 
-.no-img .content {
-	//background: orange;
-	background-image: none;
+.no-img .content  {
+  //background: orange;
+  background-image: none;
 }
 
 img {
 	max-width: 100%;
+
 }
 
 .description {
 	display: none;
+
+
 }
 
 .browserupgrade {
-	margin: 0.2em 0;
-	background: #ccc;
-	color: #000;
-	padding: 0.2em 0;
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
 }
+
